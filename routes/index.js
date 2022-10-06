@@ -4,8 +4,6 @@ const multer = require('multer');
 const path = require('path')
 const sequelize = require("sequelize");
 const { newss } = require('../models');
-
-
 const auth = require('../auth');
 
 const db = require('../models');
@@ -17,9 +15,6 @@ var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 var config = require('../config')
 const passport = require('passport');
-
-// News.Comment = News.hasMany(Comment);
-// Comment.News = Comment.belongsTo(News);
 
 
 // Configure multer
@@ -35,22 +30,6 @@ const storageEngine = multer.diskStorage({
 const upload = multer({ storage: storageEngine })
 
 
-// //! Use of Multer
-// var storage = multer.diskStorage({
-//   destination: (req, file, callBack) => {
-//     callBack(null, './public/images/')     // './public/images/' directory name where save the file
-//   },
-//   filename: (req, file, callBack) => {
-//     callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-//   }
-// })
-
-// var upload = multer({
-//   storage: storage
-// });
-
-
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -59,13 +38,6 @@ router.get('/', function (req, res, next) {
 router.get('/about', function (req, res, next) {
   res.render('about', {
     title: 'Tentang Kami',
-    session: req.session.islogin
-  });
-});
-
-router.get('/login', function (req, res, next) {
-  res.render('login', {
-    title: 'Form Login',
     session: req.session.islogin
   });
 });
@@ -79,7 +51,6 @@ router.get('/register', function (req, res, next) {
 
 router.post('/register', function (req, res, next) {
   var hashpass = bcrypt.hashSync(req.body.password, 8);
-
   var user = {
     name: req.body.fullname,
     email: req.body.email,
@@ -89,13 +60,19 @@ router.post('/register', function (req, res, next) {
   User.create(user)
     .then(data => {
       res.redirect('/news');
-      // res.send(data);
     })
     .catch(err => {
       res.render('register', {
         title: 'Form Register'
       });
     });
+});
+
+router.get('/login', function (req, res, next) {
+  res.render('login', {
+    title: 'Form Login',
+    session: req.session.islogin
+  });
 });
 
 router.post('/login', function (req, res, next) {
@@ -108,7 +85,6 @@ router.post('/login', function (req, res, next) {
           req.session.username = req.body.username;
           res.redirect('/news');
         } else {
-          // res.json({ login: "username/password salah" });
           res.redirect('/login');
         }
       } else {
@@ -118,7 +94,6 @@ router.post('/login', function (req, res, next) {
     .catch(err => {
       res.redirect('/login');
     });
-
 });
 
 router.get('/news', function (req, res, next) {
@@ -149,11 +124,8 @@ router.get('/add', auth, function (req, res, next) {
   });
 });
 
-
-
 router.post('/add', upload.single('gambar'), function (req, res, next) {
   filegambar = req.file.destination + '/' + req.file.filename;
-
   var news = {
     judul: req.body.judul,
     category: req.body.category,
@@ -194,10 +166,6 @@ router.get('/detailnews/:id', function (req, res, next) {
         });
       }
     })
-    // detail.getComment()
-    //   .then(arrayComment => {
-    //     res.send({ coments: arrayComment })
-    //   })
     .catch(err => {
       res.render('detailnews', {
         title: 'Detail News',
@@ -207,42 +175,8 @@ router.get('/detailnews/:id', function (req, res, next) {
 
 });
 
-// router.get('/detailnews/:id', function (req, res, next) {
-//   var id = parseInt(req.params.id); // productdetail?id=xxx
-//   console.log(id)
-//   const detail = News.findByPk(id, { include: Comment })
-//     .then(data => {
-//       if (data) {
-//         detail.getComments()
-//           .then(arraycomment => {
-//             res.render('detailnews', {
-//               title: 'Detail News',
-//               newss: data,
-//               komen: arraycomment
-//             })
-//           });
-//       } else {
-//         // http 404 not found
-//         res.render('data', {
-//           title: 'Detail News',
-//           newss: {}
-//         });
-//       }
-
-//     })
-//     .catch(err => {
-//       res.render('detailnews', {
-//         title: 'Detail News',
-//         newss: {}
-//       });
-//     });
-
-// });
-
 router.get('/editnews/:id', auth, function (req, res, next) {
   var id = parseInt(req.params.id); // /detail/2, /detail/3
-  // query ke database
-  // select * from product where id=id
   News.findByPk(id)
     .then(detailNews => {
       if (detailNews) {
@@ -265,9 +199,16 @@ router.get('/editnews/:id', auth, function (req, res, next) {
     });
 });
 
-router.post('/editnews/:id', function (req, res, next) {
+router.post('/editnews/:id', upload.single('gambar'), function (req, res, next) {
+  filegambar = req.file.destination + '/' + req.file.filename;
   var id = parseInt(req.params.id); // /detail/2, /detail/3
-  News.update(req.body, {
+  var news = {
+    judul: req.body.judul,
+    category: req.body.category,
+    gambar: filegambar,
+    desc: req.body.desc
+  }
+  News.update(news, {
     where: { id: id }
   })
     .then(num => {
@@ -283,10 +224,8 @@ router.post('/editnews/:id', function (req, res, next) {
 
 router.get('/deletenews/:id', auth, function (req, res, next) {
   var id = parseInt(req.params.id); // /detail/2, /detail/3
-
   News.destroy({
     where: { id: id },
-    // session: req.session.islogin
   })
     .then(num => {
       res.redirect('/news');
@@ -313,9 +252,6 @@ router.post('/addcomment/:id', function (req, res, next) {
     })
     .catch(err => {
       res.redirect('/news');
-      // res.render('/detailnews/:id', {
-      //   title: 'Detail News'
-      // });
     });
 });
 

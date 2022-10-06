@@ -8,12 +8,8 @@ var session = require('express-session')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var userRouter = require('./routes/user');
 
 var app = express();
-
-// app.use(passport.initialize())
-// require('./auth')
 
 app.use(session({
   secret: '12345',
@@ -33,9 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/')));
 
-// app.use(express.static("./public"))
-
-
 const db = require("./models");
 db.sequelize.sync()
   .then(() => {
@@ -47,7 +40,6 @@ db.sequelize.sync()
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-// app.use('/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

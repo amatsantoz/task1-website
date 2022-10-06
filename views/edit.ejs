@@ -3,7 +3,7 @@
 <br>
 <h1>Edit News</h1>
 <br>
-<form method="POST" action="/editnews/<%=id %>">
+<form method="POST" action="/editnews/<%=id %>" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="judul" class="form-label">Judul</label>
     <input type="text" class="form-control" value="<%=judul %>" name="judul" id="judul" placeholder="Judul Berita">
@@ -15,9 +15,9 @@
   </div>
   <div class="mb-3">
     <label for="gambar" class="form-label">Gambar</label>
-    <input type="text" class="form-control" value="<%=gambar %>" name="gambar" id="gambar" placeholder="Gambar">
+    <input type="file" class="form-control" value="<%=gambar %>" name="gambar" id="gambar" placeholder="<%=gambar %>"">
   </div>
-  <div class="mb-3">
+  <div class=" mb-3">
     <label for="desc" class="form-label">Deskripsi Berita</label>
     <textarea class="form-control" name="desc" id="desc" rows="3"><%=desc %></textarea>
   </div>
