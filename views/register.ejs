@@ -1,0 +1,47 @@
+<%- include('template/header')-%>
+
+<!-- partial:index.partial.html -->
+<div class="logo text-center">
+  <!-- <h1>Logo</h1> -->
+</div>
+<div class="wrapper" style="margin-top: 100px;">
+  <div class="inner-warpper text-center">
+    <h2 class="title">Register your account</h2>
+    <form method="POST" action="/register" id="formvalidate">
+      <div class="input-group">
+        <label class="palceholder" for="fullname">Full Name</label>
+        <input class="form-control" name="fullname" id="fullname" type="text" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+      <div class="input-group">
+        <label class="palceholder" for="username">User Name</label>
+        <input class="form-control" name="username" id="username" type="text" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+      <div class="input-group">
+        <label class="palceholder" for="email">Email</label>
+        <input class="form-control" name="email" id="email" type="text" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+      <div class="input-group">
+        <label class="palceholder" for="password">Password</label>
+        <input class="form-control" name="password" id="password" type="password" placeholder="" />
+        <span class="lighting"></span>
+      </div>
+
+      <button type="submit" id="login">Register</button>
+      <div class="clearfix supporter">
+      </div>
+    </form>
+  </div>
+  <div class="signup-wrapper text-center">
+    <a href="/login">Have an accout? <span class="text-primary">Login</span></a>
+  </div>
+</div>
+
+<!-- partial -->
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js'></script>
+<script src="/public/javascripts/script.js"></script>
+
+<%- include('template/footer')-%>

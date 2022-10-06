@@ -1,0 +1,53 @@
+<%- include('template/header')-%>
+<br>
+<h1>News Detail</h1>
+<br>
+<div class="card" style="display: flex;">
+  <div class="card-body" style="display:flex; align-items: center; flex-direction: column;">
+    <img src=".<%=newss.gambar %>" alt="Italian Trulli" style="width: 450px; height: 250px; margin: 10px; "></img>
+    <h3 class="card-title"><%=newss.judul %></h3>
+    <p class="card-text">Kategori: <%=newss.category %></p>
+    <p class="card-text"><%=newss.desc %></p>
+  </div>
+  <div style="display: flex; justify-content:flex-end; margin: 10px;">
+    <% if(session) { %>
+    <a href="/editnews/<%=newss.id%>" class="btn btn-info">
+      Edit</a>
+    <a href="/deletenews/<%=newss.id%>" class="btn btn-danger">
+      Delete</a>
+    <% }else{ %>
+    <a hidden href="/editnews/<%=newss.id%>" class="btn btn-info">
+      Edit</a>
+    <a hidden href="/deletenews/<%=newss.id%>" class="btn btn-danger">
+      Delete</a>
+    <% } %>
+  </div>
+</div>
+<br>
+<!-- <div>
+  <a href="/news" class="btn btn-primary">Back</a> &nbsp;
+</div> -->
+<div>
+  <h4>Komentar</h4>
+  <%komen.forEach(function(item) {%>
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text"><%=item.description%></p>
+    </div>
+  </div>
+  <%});%>
+
+  <br>
+  <form method="POST" action="/addcomment/<%=newss.id %>">
+    <div class=" mb-3">
+      <label for="description" class="form-label">Tambah Komentar</label>
+      <input type="text" class="form-control" name="description" id="description" placeholder="Tambah Komentar Disini">
+    </div>
+    <button type="submit" class="btn btn-primary">Tambah</button>
+  </form>
+</div>
+
+
+
+
+<%- include('template/footer')-%>

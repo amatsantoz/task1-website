@@ -1,0 +1,51 @@
+<%- include('template/header') -%>
+
+<br>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
+<br>
+
+&nbsp;
+<% if(session) { %>
+<a href="/add" class="btn btn-primary">
+  Add News</a>
+<% }else{ %>
+<a href="/add" class="btn btn-primary" hidden>
+  Add News</a>
+<% } %>
+
+<br>
+<br>
+
+<%newss.forEach(function(item) {%>
+<a href="/detailnews/<%=item.id%>" style="text-decoration: none; display: flex;">
+  <div class="d-flex" style="align-items:center; width: 100%;">
+    <img src="<%=item.gambar%>" alt="Italian Trulli" style="width: 250px; height: 150px; margin: 8px"></img>
+    <div class="d-flex" style="flex-direction: column; padding-left: 20px;">
+      <h3><%=item.judul%></h3>
+      <div class="d-flex" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
+        <div style="flex-direction: row; display: flex;">
+          <p style="padding-right: 10px;"><%=item.category%></p>
+          <p>Waktu : <%=item.createdAt%> WIB</p>
+        </div>
+        <div style="margin-left: 20px;">
+          <% if(session) { %>
+          <a href="/editnews/<%=item.id%>" class="btn btn-info">
+            Edit</a>
+          <a href="/deletenews/<%=item.id%>" class="btn btn-danger">
+            Delete</a>
+          <% }else{ %>
+          <a hidden href="/editnews/<%=item.id%>" class="btn btn-info">
+            Edit</a>
+          <a hidden href="/deletenews/<%=item.id%>" class="btn btn-danger">
+            Delete</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</a>
+<%});%>
+
+
+<%- include('template/footer') -%>
